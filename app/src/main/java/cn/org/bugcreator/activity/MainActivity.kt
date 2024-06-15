@@ -1,16 +1,14 @@
-package cn.org.bugcreator
+package cn.org.bugcreator.activity
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import cn.hutool.json.JSONUtil
+import cn.org.bugcreator.R
 import cn.org.bugcreator.util.OkHttpTool
 import cn.org.bugcreator.vo.CommonResult
 import com.google.gson.Gson
@@ -48,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 val loginResult = OkHttpTool.post("http://192.168.0.4:8080/user/login", dataToSend.toString(), null)
                 withContext(Dispatchers.Main) {
                 }
-                var resObj =  Gson().fromJson(loginResult, CommonResult::class.java)
+                val resObj =  Gson().fromJson(loginResult, CommonResult::class.java)
                 OkHttpTool.saveSession(resObj.message)
                 val userInfo = OkHttpTool.get("http://192.168.0.4:8080/user/getUserName")
                 withContext(Dispatchers.Main) {

@@ -2,7 +2,7 @@ package cn.org.bugcreator.util
 
 import android.content.Context
 import android.util.Log
-import cn.org.bugcreator.MyApplication
+import cn.org.bugcreator.App
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -35,12 +35,12 @@ object OkHttpTool {
 
 
     fun saveSession(sessionId: String) {
-        val sharedPreferences = MyApplication.getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = App.getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         sharedPreferences.edit().putString("sessionId", sessionId).apply()
     }
 
     fun getSession(): String? {
-        val sharedPreferences = MyApplication.getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = App.getContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         return sharedPreferences.getString("sessionId", null)
     }
     @Throws(IOException::class)
