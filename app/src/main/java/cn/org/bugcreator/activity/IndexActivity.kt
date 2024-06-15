@@ -1,6 +1,7 @@
 package cn.org.bugcreator.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -18,8 +19,12 @@ class IndexActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val receivedValue = intent.getStringExtra("userName") // 通过 key 获取传递过来的数据
+        val receivedValue = intent.getStringExtra("JSON") // 通过 key 获取传递过来的数据
+        val userName = intent.getStringExtra("userName") // 通过 key 获取传递过来的数据
+        Log.i("DEBUG", "${receivedValue}")
         val textView = findViewById<TextView>(R.id.textView)
+        val textView2 = findViewById<TextView>(R.id.textView6)
         textView.text  = receivedValue
+        textView2.text  = userName
     }
 }
