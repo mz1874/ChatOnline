@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                     val userInfo = OkHttpTool.get("http://192.168.0.4:8081/user/getUserName")
                     withContext(Dispatchers.Main) {
                     }
+                    connectWebSocket(resObj.data.name)
                     val intent = Intent(this@MainActivity, IndexActivity::class.java)
                     intent.putExtra("userName", userInfo)
                     intent.putExtra("JSON", OkHttpTool.getSession())
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun connectWebSocket(message: String) {
         val request =
-            Request.Builder().url("ws://192.168.0.4:8081/chat").addHeader("Session", message)
+            Request.Builder().url("ws://192.168.0.4:8081/socket/${message}").addHeader("Session", message)
                 .build()
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
