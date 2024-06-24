@@ -1,5 +1,6 @@
 package cn.org.bugcreator.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -10,8 +11,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import cn.org.bugcreator.LoginActivity
 import cn.org.bugcreator.R
 import cn.org.bugcreator.util.OkHttpTool
+import cn.org.bugcreator.vo.CommonResponse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,28 +81,32 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(this, "Gender is required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            val isMale = gender.equals("Male", ignoreCase = true)
 
             val dataToSend = JSONObject().apply {
                 put("name", account)
                 put("userPassword", password)
                 put("address", address)
-                put("gender", gender)
+                put("gender",isMale)
             }
-
+            val responseType = object : TypeToken<CommonResponse<Object>>() {}.type
+            var resultCode = 0;
             CoroutineScope(Dispatchers.IO).launch {
                 val result = OkHttpTool.post("http://192.168.0.4:8081/user/register", dataToSend.toString(), null)
+                val resObj: CommonResponse<String> = Gson().fromJson(result, responseType)
+                if (resObj.code == 200){
+                    resultCode = 200;
+                }
                 withContext(Dispatchers.Main) {
-                    // handle result here, e.g., show a success message or handle errors
+                    Toast.makeText(this@RegisterActivity, "Register successful", Toast.LENGTH_SHORT).show()
+                    if (resultCode == 200){
+                        val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
 
-            Toast.makeText(
-                this,
-                "Account: $account\nPassword: $password\nAddress: $address\nGender: $gender",
-                Toast.LENGTH_LONG
-            ).show()
         }
-
         resetButton.setOnClickListener {
             accountEditText.text.clear()
             passwordEditText.text.clear()
